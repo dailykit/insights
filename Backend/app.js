@@ -1,6 +1,8 @@
 require('./configuration/config');
 require('./mongoose/mongoose');
-require('./models/user');
+
+const filters = require('./utils/filters');
+
 const express = require('express');
 const app = express();
 
@@ -15,10 +17,6 @@ const {
     pick
 } = require('lodash');
 
-const {
-    check
-} = require('./utils/check');
-
 app.use((request, response, next) => {
 
     response.setHeader("Access-Control-Allow-Origin", "*");
@@ -26,21 +24,11 @@ app.use((request, response, next) => {
     next();
 });
 
-app.post('/filter', (request, response) => {
+app.get('/filter', (request, response) => {
 
-    let obj = pick(request.body, ['key', 'value', 'operation', 'model']);
-    check(obj.key, obj.value, obj.operation, obj.model).then(
-            (result) => {
-                response.send({
-                    status: result
-                })
-            }
-        )
-        .catch(err => {
-            response.send({
-                status: err
-            })
-        });
+    // filters.productByNoOfItems("Product", 0, 'gt')
+    //     .then(result => response.send(result))
+    //     .catch(error => response.send(error));
 });
 
 module.exports = app;
